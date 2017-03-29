@@ -1,0 +1,217 @@
+$(document).ready(
+			function() {
+				var length, currentIndex = 0, interval, hasStarted = false, //是否已经开始轮播 
+				t = 3000; //轮播时间间隔 
+				length = $('.slider-panel').length;
+				//将除了第一张图片隐藏 
+				$('.slider-panel:not(:first)').hide();
+				//将第一个slider-item设为激活状态 
+				$('.slider-item:first').addClass('slider-item-selected');
+				//隐藏向前、向后翻按钮 
+				//$('.slider-page').hide();
+				//鼠标上悬时显示向前、向后翻按钮,停止滑动，鼠标离开时隐藏向前、向后翻按钮，开始滑动 
+				$('.slider-panel, .slider-pre, .slider-next').hover(function() {
+					stop();
+					$('.slider-page').show();
+				}, function() {
+					//$('.slider-page').hide();
+					start();
+				});
+				$('.slider-item').hover(
+						function(e) {
+							stop();
+							var preIndex = $(".slider-item").filter(
+									".slider-item-selected").index();
+							currentIndex = $(this).index();
+							play(preIndex, currentIndex);
+						}, function() {
+							start();
+						});
+				$('.slider-pre').unbind('click');
+				$('.slider-pre').bind('click', function() {
+					pre();
+				});
+				$('.slider-next').unbind('click');
+				$('.slider-next').bind('click', function() {
+					next();
+				});
+				/** 
+				 * 向前翻页 
+				 */
+				function pre() {
+					var preIndex = currentIndex;
+					currentIndex = (--currentIndex + length) % length;
+					play(preIndex, currentIndex);
+				}
+				/** 
+				 * 向后翻页 
+				 */
+				function next() {
+					var preIndex = currentIndex;
+					currentIndex = ++currentIndex % length;
+					play(preIndex, currentIndex);
+				}
+				/** 
+				 * 从preIndex页翻到currentIndex页 
+				 * preIndex 整数，翻页的起始页 
+				 * currentIndex 整数，翻到的那页 
+				 */
+				function play(preIndex, currentIndex) {
+					$('.slider-panel').eq(preIndex).fadeOut(500).parent().children().eq(currentIndex).fadeIn(1000);
+					$('.slider-item').removeClass('slider-item-selected');
+					$('.slider-item').eq(currentIndex).addClass('slider-item-selected');
+				}
+				/** 
+				 * 开始轮播 
+				 */
+				function start() {
+					if (!hasStarted) {
+						hasStarted = true;
+						interval = setInterval(next, t);
+					}
+				}
+				/** 
+				 * 停止轮播 
+				 */
+				function stop() {
+					clearInterval(interval);
+					hasStarted = false;
+				}
+				//开始轮播 
+				start();
+				
+				var video = document.getElementById('video');
+				var playID = document.getElementById('play');
+				if(video!=undefined && playID!=undefined){
+					playID.onclick = function playinit(){
+					  if(video.paused){
+							video.play();
+							playID.style.display = "none";
+						}else{
+							video.pause();
+						}
+					}
+
+					video.onclick = function videoinit(){
+					  
+					  if(video.paused){
+							//video.play();
+							//play.style.display = "none";
+						}else{
+							video.pause();
+							playID.style.display = "";
+						}
+					}
+				}
+				
+				
+				/*
+				1.mouseover与mouseenter
+				不论鼠标指针穿过被选元素或其子元素，都会触发 mouseover 事件。
+				只有在鼠标指针穿过被选元素时，才会触发 mouseenter 事件。
+				2.mouseout与mouseleave
+				不论鼠标指针离开被选元素还是任何子元素，都会触发 mouseout 事件。 
+				 只有在鼠标指针离开被选元素时，才会触发 mouseleave 事件。*/
+
+				
+				$('#body_images_right_top_mouseover').mouseenter(function(){
+					//alert(isFloat);
+					$('.body_images_right_top_low_image').fadeTo(500,0.5);
+					$('.body_images_right_top_float').show();
+				}).mouseleave(function() {
+					//alert(isFloat);
+					$('.body_images_right_top_low_image').fadeTo(500,1);
+					$('.body_images_right_top_float').hide()
+				});
+				
+				$('#body_images_right__bootm_left_mouseover').mouseenter(function(){
+					//alert(isFloat);
+					$('#body_images_right_bootm_image_left').fadeTo(500,0.5);
+					$('.body_images_right__bootm_left_float').show();
+				}).mouseleave(function() {
+					//alert(isFloat);
+					$('#body_images_right_bootm_image_left').fadeTo(500,1);
+					$('.body_images_right__bootm_left_float').hide()
+				});
+				
+				$('#body_images_right__bootm_right_mouseover').mouseenter(function(){
+					//alert(isFloat);
+					$('#body_images_right_bootm_image_right').fadeTo(500,0.5);
+					$('.body_images_right__bootm_right_float').show();
+				}).mouseleave(function() {
+					//alert(isFloat);
+					$('#body_images_right_bootm_image_right').fadeTo(500,1);
+					$('.body_images_right__bootm_right_float').hide()
+				});
+				
+				
+				
+				var items= $('.consult_article_next_item');
+				items[0].style.background="#CCCCCC";
+				
+				var currIndex = 1;
+				
+				$('#consult_article_pro').click(function(){//上一页
+					if(currIndex==1){
+						return;
+					}
+					var add = 0;
+					if(currIndex%5==1){
+						add = 5;
+					}
+					var items= $('.consult_article_next_item');
+					for(var i=0;i<items.length;i++){
+						var value = parseInt(items[i].innerHTML)-add;
+						items[i].innerHTML =value;
+						items[i].style.background="#1367b6";
+					}
+					if(currIndex%5==1){
+						items[0].style.background="#CCCCCC";
+						currIndex -=add;
+					}
+					else{
+						items[(currIndex-2)%5].style.background="#CCCCCC";
+						currIndex -=1;
+					}
+					
+				});
+				
+				$('#consult_article_next').click(function(){//下一页
+					//alert("next");
+					var items= $('.consult_article_next_item');
+					var add = 0;
+					if(currIndex%5==0){
+						add = 5;
+					}
+					for(var i=0;i<items.length;i++){
+						var value = parseInt(items[i].innerHTML)+add;
+						items[i].innerHTML =value;
+						items[i].style.background="#1367b6";
+					}
+					add = 0;
+					if(currIndex%5==0){
+						items[0].style.background="#CCCCCC";
+					}
+					else{
+						items[currIndex%5].style.background="#CCCCCC";
+					}
+					currIndex =currIndex+1;
+					
+					
+				});
+				
+				$('.consult_article_next_item').click(function(){  //指定一页
+					var items= $('.consult_article_next_item');
+					for(var i=0;i<items.length;i++){
+						items[i].style.background="#1367b6";
+					}
+					this.style.background="#CCCCCC";
+					currIndex = parseInt(this.innerHTML);
+					
+					
+				});
+				
+				
+				
+			});
+			
