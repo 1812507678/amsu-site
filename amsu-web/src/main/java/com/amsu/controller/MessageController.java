@@ -1,5 +1,7 @@
 package com.amsu.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -89,6 +91,13 @@ public class MessageController {
 
 		return returnpage;
 	}       
-
+	@RequestMapping(value="/demo")
+	public void demo() throws Exception{
+		File file = new File("files/qtmba.xlsx");
+		String path = file.getCanonicalPath();
+		System.out.println(path);
+		FileInputStream i = new FileInputStream(file);
+		System.out.println(i);
+	}
 
 }
